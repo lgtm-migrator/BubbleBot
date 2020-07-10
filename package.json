@@ -1,0 +1,32 @@
+{
+  "name": "bubble-bot",
+  "version": "1.0.0",
+  "description": "pop!",
+  "main": "ShardManager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ShardManager"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LegoDevStudio/BubbleBot.git"
+  },
+  "keywords": [
+    "bubble",
+    "pop",
+    "wrap",
+    "discord",
+    "bot"
+  ],
+  "author": "LegoDev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LegoDevStudio/BubbleBot/issues"
+  },
+  "homepage": "https://github.com/LegoDevStudio/BubbleBot#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0"
+  }
+}
