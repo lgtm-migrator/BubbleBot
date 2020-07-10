@@ -22,7 +22,7 @@ Client.on("message", message => {
 
         if(command == "generate" || command == "g" || command == "gen") {
             if(args[0] == undefined || isNaN(parseInt(args[0]))) args[0] = "10";
-            if(parseInt(args[0]) > 25 || parseInt(args[0]) < 1) return message.reply("Size must be between 0 and 26.");
+            if(parseInt(args[0]) > 25 || parseInt(args[0]) < 1) return message.reply("Size must be between 1 and 25.");
             var bubblewrap = new BubbleWrap(parseInt(args[0])) // {maxLength:args[0] == "33" ? 2000 : 1344}
             message.channel.send(bubblewrap.generate(), {split: {maxLength:1344}});
         }
