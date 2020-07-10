@@ -27,68 +27,62 @@ Client.on("message", message => {
             message.channel.send(bubblewrap.generate(), {split: {maxLength:1344}});
         }
         if(command == "credits") message.reply({
-            "embeds": [
-                {
-                    "title": "Credits!",
-                    "color": 1638144,
-                    "fields": [
-                        {
-                            "name": "Starshine System",
-                            "value": "Help with design ideas and questioning my life decisions",
-                            "inline": true
-                        },
-                        {
-                            "name": "Wordsworth's System",
-                            "value": "Also helped with design ideas\n",
-                            "inline": true
-                        },
-                        {
-                            "name": "Colour System",
-                            "value": "Also helped out\n",
-                            "inline": true
-                        },
-                        {
-                            "name": "LegoDev",
-                            "value": "Bot Creator and Maintainer",
-                            "inline": true
-                        }
-                    ]
-                }
-            ]
+            "embed": {
+                "title": "Credits!",
+                "color": 1638144,
+                "fields": [
+                    {
+                        "name": "Starshine System",
+                        "value": "Help with design ideas and questioning my life decisions",
+                        "inline": true
+                    },
+                    {
+                        "name": "Wordsworth's System",
+                        "value": "Also helped with design ideas\n",
+                        "inline": true
+                    },
+                    {
+                        "name": "Colour System",
+                        "value": "Also helped out\n",
+                        "inline": true
+                    },
+                    {
+                        "name": "LegoDev",
+                        "value": "Bot Creator and Maintainer",
+                        "inline": true
+                    }
+                ]
+            }
          });
         if(command == "help")  message.reply({
-            "embeds": [
-                {
-                    "title": "Commands",
-                    "color": 58111,
-                    "fields": [
-                        {
-                            "name": "g/gen/generate [size]",
-                            "value": "Generate some bubble wrapping!\nMax size is 25.",
-                            "inline": true
-                        },
-                        {
-                            "name": "credits",
-                            "value": "Credits for those who helped test\n",
-                            "inline": true
-                        },
-                        {
-                            "name": "invite",
-                            "value": "Invite the bot to your own server!\n",
-                            "inline": true
-                        }
-                    ]
-                }
-            ]
+            "embed": {
+                "title": "Commands",
+                "color": 58111,
+                "fields": [
+                    {
+                        "name": "g/gen/generate [size]",
+                        "value": "Generate some bubble wrapping!\nMax size is 25.",
+                        "inline": true
+                    },
+                    {
+                        "name": "credits",
+                        "value": "Credits for those who helped test\n",
+                        "inline": true
+                    },
+                    {
+                        "name": "invite",
+                        "value": "Invite the bot to your own server!\n",
+                        "inline": true
+                    }
+                ]
+            }
         });
         if(command == "invite") message.reply({
-            "embeds": [
-                {
-                    "title": "Click here to invite me to your server!",
-                    "url": "https://discord.com/api/oauth2/authorize?client_id=229184831769149440&permissions=0&scope=bot",
-                    "color": 15139071
-                }
-            ]
+            "embed": {
+                "title": "Click here to invite me to your server!",
+                "url": "https://discord.com/api/oauth2/authorize?client_id=229184831769149440&permissions=0&scope=bot",
+                "color": 15139071
+            }
         });
     }
 });
