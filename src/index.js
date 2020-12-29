@@ -1,33 +1,50 @@
-require("dotenv").config({path: __dirname+"/../.env"});
+require("dotenv").config({ path: __dirname + "/../.env" });
 
 const Discord = require("discord.js");
+const Application = require("./discord-slash-commands");
 const BubbleWrap = require("./BubbleWrap");
 const Client = new Discord.Client({
-    "disableMentions":"everyone"
+    "disableMentions": "everyone"
 });
+const Slash = new Application.Client(Client);
 
 const prefix = "pop!"
 
 Client.on("ready", () => {
     require("./Console")(Client.shard.ids[0]);
-    console.info("Ready. Operating in "+Client.guilds.cache.size+" guilds.");
-    Client.user.setPresence({ "activity":{ "name":"pop!gen to generate! | Shard "+(Client.shard.ids[0]+1)+"/"+Client.shard.count }, "shardID": Client.shard.ids[0] });
+    console.info("Ready. Operating in " + Client.guilds.cache.size + " guilds.");
+    Client.user.setPresence({ "activity": { "name": "pop!gen to generate! | Shard " + (Client.shard.ids[0] + 1) + "/" + Client.shard.count }, "shardID": Client.shard.ids[0] });
+
+    if (Client.shard.ids[0] == "0") {
+        // Shard 0 is responsible for DMs and Interations.
+        console.info("Listening for application commands.")
+        Client.on("applicationCommand", async interaction => {
+            if (interaction.command.name == "bubble") {
+                let size = interaction.command.arguments.get("size") == undefined ? 10 : interaction.command.arguments.get("size").value;
+                let popChance = interaction.command.arguments.get("prepopped") == undefined ? 0 : interaction.command.arguments.get("prepopped").value;
+
+                if (size < 1 || size > 13) return interaction.send("I was unable to process your request since the size you returned was not between 1 and 13.");
+                var bubblewrap = new BubbleWrap(size, popChance);
+                interaction.send(bubblewrap.generate());
+            }
+        });
+    }
 });
 
 Client.on("message", message => {
-    if(message.author.bot) return;
-    if(message.content.startsWith(prefix)) {
+    if (message.author.bot) return;
+    if (message.content.startsWith(prefix)) {
         var command = message.content.replace(prefix, "").split(" ")[0];
         var args = message.content.replace(prefix, "").split(" ").splice(1);
 
-        if(command == "generate" || command == "g" || command == "gen") {
-            if(args[0] == undefined) args[0] = "10";
-            if(isNaN(parseInt(args[0]))) return message.reply("You must provide a number for the size.");
-            if(parseInt(args[0]) > 25 || parseInt(args[0]) < 1) return message.reply("Size must be between 1 and 25.");
-            var bubblewrap = new BubbleWrap(parseInt(args[0])) // {maxLength:args[0] == "33" ? 2000 : 1344}
-            message.channel.send(bubblewrap.generate(), {split: {maxLength:1344}});
+        if (command == "generate" || command == "g" || command == "gen") {
+            if (args[0] == undefined) args[0] = "10";
+            if (isNaN(parseInt(args[0]))) return message.reply("You must provide a number for the size.");
+            if (parseInt(args[0]) > 25 || parseInt(args[0]) < 1) return message.reply("Size must be between 1 and 25.");
+            var bubblewrap = new BubbleWrap(parseInt(args[0]))
+            message.channel.send(bubblewrap.generate(), { split: { maxLength: 1344 } });
         }
-        if(command == "credits") message.reply({
+        if (command == "credits") message.reply({
             "embed": {
                 "title": "Credits!",
                 "color": 1638144,
@@ -54,8 +71,8 @@ Client.on("message", message => {
                     }
                 ]
             }
-         });
-        if(command == "help")  message.reply({
+        });
+        if (command == "help") message.reply({
             "embed": {
                 "title": "Commands",
                 "color": 58111,
@@ -78,11 +95,12 @@ Client.on("message", message => {
                 ]
             }
         });
-        if(command == "invite") message.reply({
+        if (command == "invite") message.reply({
             "embed": {
                 "title": "Click here to invite me to your server!",
                 "url": "https://discord.com/api/oauth2/authorize?client_id=229184831769149440&permissions=0&scope=bot",
-                "color": 15139071
+                "color": 15139071,
+                "description": "Or alternatly, [Click here to add the mini version of Bubble Bot!](https://discord.com/api/oauth2/authorize?client_id=229184831769149440&scope=applications.commands)"
             }
         });
     }

@@ -7,14 +7,14 @@ class BubbleWrap {
     }
     generate() {
         let wrap = [];
-        for(var y = 0; y<=this.size; y++) {
-            if(y == this.size) {
+        for (var y = 0; y <= this.size; y++) {
+            if (y == this.size) {
                 return wrap.join("");
             }
-            for(var x = 0; x < this.size; x++) {
-                if(Math.floor(Math.random() * this.popchance) == 1 && ((x != 0 && x != this.size-1) && (y != 0 && y != this.size-1))) {
+            for (var x = 0; x < this.size; x++) {
+                if (Math.floor(Math.random() * (100 / this.popchance)) == 1 && ((x != 0 && x != this.size - 1) && (y != 0 && y != this.size - 1))) {
                     wrap.push("pop");
-                }else{
+                } else {
                     wrap.push("||pop||");
                 }
             }
