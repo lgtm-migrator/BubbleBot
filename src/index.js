@@ -1,32 +1,43 @@
 require("dotenv").config({ path: __dirname + "/../.env" });
 
 const Discord = require("discord.js");
-const Application = require("./discord-slash-commands");
+const path = require('path');
 const BubbleWrap = require("./BubbleWrap");
 const Client = new Discord.Client({
     "disableMentions": "everyone"
 });
-const Slash = new Application.Client(Client);
 
 const prefix = "pop!"
 
-Client.on("ready", () => {
+Client.on("ready", async () => {
     require("./Console")(Client.shard.ids[0]);
-    console.info("Ready. Operating in " + Client.guilds.cache.size + " guilds.");
+    console.info("Ready. Assigned " + Client.guilds.cache.size + " guilds.");
     Client.user.setPresence({ "activity": { "name": "pop!gen to generate! | Shard " + (Client.shard.ids[0] + 1) + "/" + Client.shard.count }, "shardID": Client.shard.ids[0] });
+
+    Client.application = await Client.fetchApplication();
 
     if (Client.shard.ids[0] == "0") {
         // Shard 0 is responsible for DMs and Interations.
-        console.info("Listening for application commands.")
-        Client.on("applicationCommand", async interaction => {
-            if (interaction.command.name == "bubble") {
-                let size = interaction.command.arguments.get("size") == undefined ? 10 : interaction.command.arguments.get("size").value;
-                let popChance = interaction.command.arguments.get("prepopped") == undefined ? 0 : interaction.command.arguments.get("prepopped").value;
+        console.debug("Creating Application Command handler.");
+        const { SlashCreator, GatewayServer } = require('slash-create');
 
-                if (size < 1 || size > 13) return interaction.send("I was unable to process your request since the size you returned was not between 1 and 13.");
-                var bubblewrap = new BubbleWrap(size, popChance);
-                interaction.send(bubblewrap.generate());
-            }
+        const creator = new SlashCreator({
+            applicationID: (await Client.fetchApplication()).id,
+            publicKey: process.env.PUB_KEY,
+            token: Client.token,
+        });
+
+        creator
+            .registerCommandsIn(path.join(__dirname, '..', 'commands'))
+            .syncCommands()
+            .withServer(
+                new GatewayServer(
+                    (handler) => Client.ws.on('INTERACTION_CREATE', handler)
+                )
+            );
+
+        creator.on("synced", () => {
+            console.info("Listening for application commands from minified instances.");
         });
     }
 });
